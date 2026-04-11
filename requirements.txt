@@ -1,0 +1,27 @@
+# Core
+pyspark==3.5.1
+delta-spark==3.1.0
+
+# Data processing
+pandas==2.2.2
+pyarrow==15.0.2
+
+# FHIR parsing
+fhir.resources==7.1.0
+
+# ML
+xgboost==2.0.3
+scikit-learn==1.4.2
+shap==0.45.0
+mlflow==2.12.1
+
+# Azure SDK
+azure-storage-file-datalake==12.15.0
+azure-identity==1.16.0
+
+# Data quality
+great-expectations==0.18.15
+
+# Utilities
+python-dotenv==1.0.1
+requests==2.31.0
