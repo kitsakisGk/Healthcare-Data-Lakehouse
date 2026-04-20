@@ -36,11 +36,19 @@ A production-grade healthcare data pipeline ingesting synthetic FHIR patient dat
 |---|---|---|
 | Ingestion | [ingestion/](ingestion/) | Load raw FHIR JSON bundles from ADLS into Delta |
 | Bronze | [transformation/bronze/](transformation/bronze/) | Raw FHIR data, partitioned by resource type |
-| Silver | [transformation/silver/](transformation/silver/) | Cleaned, parsed, joined patient records |
-| Gold | [transformation/gold/](transformation/gold/) | Aggregated KPIs, readmission flags, risk scores |
+| Silver | [transformation/silver/](transformation/silver/) | Cleaned, parsed, joined patient records (Patient, Condition, Encounter, Medication, Observation, Procedure) |
+| Gold | [transformation/gold/](transformation/gold/) | Aggregated KPIs, readmission flags, ML-ready feature table |
 | ML | [ml/](ml/) | XGBoost readmission model, SHAP explainability |
 | Governance | [governance/](governance/) | Unity Catalog setup, FADP masking, audit logging |
 | Dashboard | [dashboard/](dashboard/) | Power BI reports connected to Gold layer |
+
+### Gold Layer Tables
+
+| Script | Output Table | Description |
+|---|---|---|
+| [01_gold_patient_summary.py](transformation/gold/01_gold_patient_summary.py) | `patient_summary` | One row per patient — demographics, encounter counts, 30-day readmission flag |
+| [02_gold_population_health.py](transformation/gold/02_gold_population_health.py) | `condition_prevalence`, `encounter_volume_monthly`, `readmission_by_condition` | Population-level KPIs for Power BI |
+| [03_gold_patient_features.py](transformation/gold/03_gold_patient_features.py) | `patient_features` | ML-ready feature table — labs, medications, procedures, derived risk flags |
 
 ---
 
@@ -96,7 +104,7 @@ java -jar synthea-with-dependencies.jar -p 1000 --exporter.fhir.export true
 ## Project Status
 
 - [x] Phase 1 — Foundation (repo structure, Synthea, Azure)
-- [ ] Phase 2 — Medallion pipeline (Bronze → Silver → Gold)
+- [x] Phase 2 — Medallion pipeline (Bronze → Silver → Gold)
 - [ ] Phase 3 — Unity Catalog + FADP + ML model
 - [ ] Phase 4 — Power BI dashboard + architecture diagram + polish
 
