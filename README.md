@@ -36,11 +36,20 @@ A production-grade healthcare data pipeline ingesting synthetic FHIR patient dat
 |---|---|---|
 | Ingestion | [ingestion/](ingestion/) | Load raw FHIR JSON bundles from ADLS into Delta |
 | Bronze | [transformation/bronze/](transformation/bronze/) | Raw FHIR data, partitioned by resource type |
-| Silver | [transformation/silver/](transformation/silver/) | Cleaned, parsed, joined patient records (Patient, Condition, Encounter, Medication, Observation, Procedure) |
+| Silver | [transformation/silver/](transformation/silver/) | Cleaned, parsed, joined patient records — Patient, Condition, Encounter, Medication (done); Observation, Procedure (coming) |
 | Gold | [transformation/gold/](transformation/gold/) | Aggregated KPIs, readmission flags, ML-ready feature table |
 | ML | [ml/](ml/) | XGBoost readmission model, SHAP explainability |
 | Governance | [governance/](governance/) | Unity Catalog setup, FADP masking, audit logging |
 | Dashboard | [dashboard/](dashboard/) | Power BI reports connected to Gold layer |
+
+### Silver Layer Scripts
+
+| Script | FHIR Resource | Key Fields |
+|---|---|---|
+| [01_silver_patients.py](transformation/silver/01_silver_patients.py) | Patient | Demographics, PII flagged, dedup |
+| [02_silver_conditions.py](transformation/silver/02_silver_conditions.py) | Condition | SNOMED CT + ICD-10 coding, clinical status |
+| [03_silver_encounters.py](transformation/silver/03_silver_encounters.py) | Encounter | Visit type, LOS, timestamps — source of 30-day readmission flag |
+| [04_silver_medications.py](transformation/silver/04_silver_medications.py) | MedicationRequest | RxNorm coding, active/chronic flags |
 
 ### Gold Layer Tables
 
