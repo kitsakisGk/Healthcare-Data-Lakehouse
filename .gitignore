@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+
+# Environment / secrets — NEVER commit these
+.env
+.env.*
+*.key
+*.pem
+secrets/
+config/local_*.json
+
+# Databricks
+.databricks/
+*.dbc
+
+# Synthea output (too large for git)
+ingestion/synthea/output/
+ingestion/synthea/synthea-with-dependencies.jar
+
+# Delta Lake local files
+spark-warehouse/
+derby.log
+metastore_db/
+
+# ML artifacts
+ml/models/*.pkl
+ml/models/*.json
+mlruns/
+
+# Power BI
+dashboard/*.pbix
+
+# Claude Code
+.claude/
+
+# IDE
+.vscode/settings.json
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
