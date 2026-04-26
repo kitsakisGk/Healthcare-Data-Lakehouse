@@ -53,6 +53,29 @@ A production-grade healthcare data pipeline ingesting synthetic FHIR patient dat
 | [05_silver_observations.py](transformation/silver/05_silver_observations.py) | Observation | LOINC coding, lab values, vitals (HbA1c, BMI, BP, eGFR) |
 | [06_silver_procedures.py](transformation/silver/06_silver_procedures.py) | Procedure | SNOMED coding, surgical history, dialysis flag |
 
+### Governance Scripts
+
+| Script | Description |
+|---|---|
+| [01_unity_catalog_setup.py](governance/01_unity_catalog_setup.py) | Creates catalog + 3 schemas, registers all Delta tables, applies access controls and column comments |
+| [02_fadp_masking.py](governance/02_fadp_masking.py) | Hashes PII columns (name, MRN), suppresses granular location data, tags columns in Unity Catalog |
+| [03_audit_logging.py](governance/03_audit_logging.py) | Logs every read/write on sensitive tables — user, timestamp, action, row count |
+
+### ML Scripts
+
+| Script | Description |
+|---|---|
+| [01_train_readmission_model.py](ml/01_train_readmission_model.py) | XGBoost binary classifier for 30-day readmission, MLflow experiment tracking, AUC/precision/recall evaluation |
+| [02_explain_shap.py](ml/02_explain_shap.py) | SHAP feature importance, beeswarm and waterfall plots, per-patient top risk factors written to Gold |
+
+### Tests
+
+| Script | What it checks |
+|---|---|
+| [01_test_bronze.py](tests/01_test_bronze.py) | Table existence, row counts, null resource_ids, valid JSON, no duplicates |
+| [02_test_silver.py](tests/02_test_silver.py) | Referential integrity, date completeness, SNOMED/LOINC/RxNorm coverage, PII presence, age range |
+| [03_test_gold.py](tests/03_test_gold.py) | One row per patient, realistic readmission rate, no negative values, zero PII, risk scores in range |
+
 ### Gold Layer Tables
 
 | Script | Output Table | Description |
@@ -116,7 +139,7 @@ java -jar synthea-with-dependencies.jar -p 1000 --exporter.fhir.export true
 
 - [x] Phase 1 — Foundation (repo structure, Synthea, Azure)
 - [x] Phase 2 — Medallion pipeline (Bronze → Silver → Gold)
-- [ ] Phase 3 — Unity Catalog + FADP + ML model
+- [x] Phase 3 — Unity Catalog + FADP + ML model + Tests
 - [ ] Phase 4 — Power BI dashboard + architecture diagram + polish
 
 ---
