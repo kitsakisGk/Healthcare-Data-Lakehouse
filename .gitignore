@@ -51,3 +51,7 @@ dashboard/*.pbix
 # OS
 .DS_Store
 Thumbs.db
+
+# Internal planning docs
+healthcare_lakehouse_project_map.md
+healthcare_lakehouse_project_map.md.pdf
