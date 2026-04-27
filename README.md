@@ -144,6 +144,53 @@ java -jar synthea-with-dependencies.jar -p 1000 --exporter.fhir.export true
 
 ---
 
+## Roadmap — Phase 4
+
+Everything remaining before this project is fully complete and recruiter-ready.
+
+### 4.1 — Synthea Data Generation
+Generate 1000 synthetic patients locally and run the full pipeline end-to-end.
+
+```bash
+# Install Java 11+ from https://adoptium.net
+java -version
+
+# Download synthea-with-dependencies.jar from:
+# https://github.com/synthetichealth/synthea/releases/latest
+mkdir ingestion/synthea && cd ingestion/synthea
+
+# Generate 1000 patients in FHIR R4 format
+java -jar synthea-with-dependencies.jar -p 1000 --exporter.fhir.export true
+
+# Run the bronze ingestion
+cd ../..
+python ingestion/ingest_fhir_bronze.py --source ./ingestion/synthea/output/fhir
+```
+
+### 4.2 — Architecture Diagram
+Draw the full pipeline using [draw.io](https://draw.io) (free).
+
+Show: `Synthea → ADLS Gen2 → Databricks Bronze → Silver → Gold → Unity Catalog → Power BI + ML`
+
+Highlight the FADP compliance layer and Unity Catalog as separate components. Export as `docs/architecture.png` and embed in this README.
+
+### 4.3 — Power BI Dashboard
+Connect Power BI Desktop to the Gold layer via the Databricks SQL connector.
+
+Visuals to build:
+- Patient population overview — age distribution, top 10 conditions
+- 30-day readmission rate by condition type
+- Top risk patients table — `readmission_risk_score` + `top_risk_factors`
+- SHAP feature importance chart
+
+### 4.4 — README Final Polish
+Once the pipeline has run and the ML model has been evaluated:
+- Embed `docs/architecture.png`
+- Fill in real AUC-ROC, precision, recall scores
+- Add SHAP feature importance plot to `docs/`
+
+---
+
 ## About
 
 Built as a portfolio project to demonstrate production-grade data engineering skills in regulated healthcare environments, targeting Swiss pharma and MedTech companies (Roche, Novartis, Lonza).
