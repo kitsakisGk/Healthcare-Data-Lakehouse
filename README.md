@@ -196,4 +196,4 @@ Once the pipeline has run and the ML model has been evaluated:
 Built as a portfolio project to demonstrate production-grade data engineering skills in regulated healthcare environments, targeting Swiss pharma and MedTech companies (Roche, Novartis, Lonza).
 
 
-Fixed the image 
+We need to test the pipelines in databricks again|| Some of them have errors
